@@ -43,6 +43,7 @@ if (!this.global.radar) {
 			query = input;
 		}));
 		radar.addImageButton(Icon.zoom, Styles.clearPartiali, run(() => {
+			result = "...";
 			find(query);
 		}));
 		radar.label(prov(() => result));
