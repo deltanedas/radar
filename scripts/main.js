@@ -51,7 +51,7 @@ if (!this.global.radar) {
 		radar.visible(boolp(() => Vars.state.state == GameState.State.playing));
 		radar.defaults().width(100).height(50);
 		radar.margin(4).top().left();
-		radar.marginTop(240).marginLeft(20);
+		radar.marginTop(40).marginLeft(400);
 
 		Core.scene.add(radar);
 	}));
