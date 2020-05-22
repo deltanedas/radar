@@ -1,0 +1,8 @@
+{
+	"name": "radar",
+	"displayName": "[#00aaff]Radar",
+	"author": "DeltaNedas",
+	"description": "Adds a block detecting radar.",
+	"version": "1.0.0",
+	"hidden": true
+}
