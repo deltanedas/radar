@@ -1,4 +1,4 @@
-const ui = require("ui-lib/library");
+var ui = require("ui-lib/library");
 
 const valid = (name, block) => {
 	return block === null ? false : block.name.includes(name);
