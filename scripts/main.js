@@ -4,7 +4,7 @@ const valid = (name, block) => {
 	return block === null ? false : block.name.includes(name);
 };
 
-var result = "Radar", query = "";
+var result = "", query = "";
 
 const findRow = (name, x) => {
 	if (x == Vars.world.width()) {
@@ -19,6 +19,9 @@ const findRow = (name, x) => {
 		tile = col[y];
 		if (valid(name, tile.block()) || valid(name, tile.floor())) {
 			result = "[green](" + x + ", " + y + ")[]";
+			if (this.global.tracker) {
+				this.global.tracker.set({x: x * Vars.tilesize, y: y * Vars.tilesize});
+			}
 			return;
 		}
 	}
@@ -34,14 +37,11 @@ const find = name => {
 };
 
 ui.addTable("top", "radar", radar => {
-	print("Radar " + radar)
-	radar.defaults().width(100).height(50);
-	radar.addField("Search", cons(input => {
-		query = input;
-	}));
-	radar.addImageButton(Icon.zoom, Styles.clearPartiali, run(() => {
-		result = "...";
+	radar.addImageButton(Icon.zoom, Styles.clearTransi, run(() => {
 		find(query);
 	}));
+	radar.addField("Radar", cons(input => {
+		query = input;
+	})).width(100);
 	radar.label(prov(() => result));
 });
