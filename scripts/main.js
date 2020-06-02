@@ -1,3 +1,5 @@
+const ui = require("ui-lib/library");
+
 const valid = (name, block) => {
 	return block === null ? false : block.name.includes(name);
 };
@@ -31,28 +33,15 @@ const find = name => {
 	findRow(name, 0);
 };
 
-// Prevent adding multiple radars
-if (!this.global.radar) {
-	this.global.radar = true;
-
-	Events.on(EventType.ClientLoadEvent, run(e => {
-		const radar = new Table();
-		radar.setFillParent(true);
-
-		radar.addField("Search", cons(input => {
-			query = input;
-		}));
-		radar.addImageButton(Icon.zoom, Styles.clearPartiali, run(() => {
-			result = "...";
-			find(query);
-		}));
-		radar.label(prov(() => result));
-
-		radar.visible(boolp(() => Vars.state.state == GameState.State.playing));
-		radar.defaults().width(100).height(50);
-		radar.margin(4).top().left();
-		radar.marginTop(40).marginLeft(400);
-
-		Core.scene.add(radar);
+ui.addTable("top", "radar", radar => {
+	print("Radar " + radar)
+	radar.defaults().width(100).height(50);
+	radar.addField("Search", cons(input => {
+		query = input;
 	}));
-}
+	radar.addImageButton(Icon.zoom, Styles.clearPartiali, run(() => {
+		result = "...";
+		find(query);
+	}));
+	radar.label(prov(() => result));
+});
