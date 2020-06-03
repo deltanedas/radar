@@ -20,7 +20,7 @@ const findRow = (name, x) => {
 		if (valid(name, tile.block()) || valid(name, tile.floor())) {
 			result = "[green](" + x + ", " + y + ")[]";
 			if (this.global.tracker) {
-				this.global.tracker.marker = {x: x * Vars.tilesize, y: y * Vars.tilesize};
+				this.global.tracker.setMarker({x: x * Vars.tilesize, y: y * Vars.tilesize});
 			}
 			return;
 		}
