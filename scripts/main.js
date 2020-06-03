@@ -38,6 +38,7 @@ const find = name => {
 
 ui.addTable("top", "radar", radar => {
 	radar.addImageButton(Icon.zoom, Styles.clearTransi, run(() => {
+		result = "...";
 		find(query);
 	}));
 	radar.addField("Radar", cons(input => {
