@@ -37,8 +37,6 @@ const findRow = (name, x) => {
 };
 
 const find = name => {
-	print("lastFound is " + lastFound)
-	print("lastFound.x is " + lastFound.x)
 	findRow(name, lastFound.x);
 };
 
