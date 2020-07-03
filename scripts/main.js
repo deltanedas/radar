@@ -38,10 +38,12 @@ const findRow = (name, x) => {
 
 	const tiles = Vars.world.tiles;
 	const col = tiles[x];
+	if (!col) return;
+
 	var tile;
 	for (var y = (x == lastFound.x ? lastFound.y : 0); y < Vars.world.height(); y++) {
 		tile = col[y];
-		if (valid(name, [tile.block(), tile.floor(), tile.overlay()])) {
+		if (tile && valid(name, [tile.block(), tile.floor(), tile.overlay()])) {
 			result = "[green](" + x + ", " + y + ")[]";
 			lastFound.x = x;
 			// Prevent finding the same thing without looping over
