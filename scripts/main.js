@@ -89,6 +89,7 @@ ui.onLoad(() => {
 
 const tmpVec = new Vec2();
 ui.addEffect((w, h) => {
+	Draw.color();
 	for (var i in results) {
 		var res = results[i];
 		var scl = res.age / resultAge;
@@ -108,6 +109,7 @@ ui.addEffect((w, h) => {
 		// 4 rotations
 		Draw.rect(region, pos.x, pos.y, scl * 1440);
 	}
+	Draw.reset();
 });
 
 })();
