@@ -14,7 +14,13 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-var ui = require("ui-lib/library");
+
+(() => {
+
+const ui = require("ui-lib/library")
+
+// Frames a result lasts for
+const resultAge = 60 * 20;
 
 const valid = (name, blocks) => {
 	var block;
@@ -27,12 +33,12 @@ const valid = (name, blocks) => {
 	return false;
 };
 
-var result = "", query = "", lastFound = {x: 0, y: 0};
+// TODO: search in fixed tile count chunks (say 10x10) per tick instead of an entire col
+
+var results = [], query = "";
 
 const findRow = (name, x) => {
 	if (x == Vars.world.width()) {
-		result = "[red]X[]";
-		lastFound.x = lastFound.y = 0;
 		return
 	}
 
@@ -41,17 +47,13 @@ const findRow = (name, x) => {
 	if (!col) return;
 
 	var tile;
-	for (var y = (x == lastFound.x ? lastFound.y : 0); y < Vars.world.height(); y++) {
+	for (var y = 0; y < Vars.world.height(); y++) {
 		tile = col[y];
 		if (tile && valid(name, [tile.block(), tile.floor(), tile.overlay()])) {
-			result = "[green](" + x + ", " + y + ")[]";
-			lastFound.x = x;
-			// Prevent finding the same thing without looping over
-			lastFound.y = y + 1;
+			results.push({tile: tile, age: 0});
 			if (this.global.tracker) {
 				this.global.tracker.setMarker({x: x * Vars.tilesize, y: y * Vars.tilesize});
 			}
-			return;
 		}
 	}
 
@@ -62,16 +64,50 @@ const findRow = (name, x) => {
 };
 
 const find = name => {
-	findRow(name, lastFound.x);
+	findRow(name, 0);
 };
+
+Events.on(EventType.WorldLoadEvent, run(() => {
+	results = [];
+}));
 
 ui.addTable("top", "radar", radar => {
 	radar.addImageButton(Icon.zoom, Styles.clearTransi, run(() => {
-		result = "...";
+		results = [];
 		find(query);
 	}));
 	radar.addField("Radar", cons(input => {
 		query = input;
 	})).width(100);
-	radar.label(prov(() => result));
+	radar.label(prov(() => "" + results.length));
 });
+
+var region;
+ui.onLoad(() => {
+	region = Core.atlas.find("radar-blip");
+});
+
+const tmpVec = new Vec2();
+ui.addEffect((w, h) => {
+	for (var i in results) {
+		var res = results[i];
+		var scl = res.age / resultAge;
+		if (++res.age > resultAge) {
+			results.splice(i, i);
+		}
+
+		// Project the tiles position onto the screen
+		tmpVec.set(res.tile.worldx(), res.tile.worldy());
+		const pos = Core.camera.project(tmpVec);
+		// Don't draw off-screen blips
+		if (pos.x < 0 || pos.y < 0 || pos.x > w || pos.y > h) {
+			continue;
+		}
+
+		Draw.alpha(1 - scl);
+		// 4 rotations
+		Draw.rect(region, pos.x, pos.y, scl * 1440);
+	}
+});
+
+})();
