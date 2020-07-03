@@ -17,69 +17,29 @@
 
 (() => {
 
-const ui = require("ui-lib/library")
+const ui = require("ui-lib/library");
+const scanner = require("radar/scanner");
 
 // Frames a result lasts for
 const resultAge = 60 * 20;
 
-const valid = (name, blocks) => {
-	var block;
-	for (var i in blocks) {
-		block = blocks[i];
-		if (block.name.includes(name)) {
-			return true;
-		}
-	}
-	return false;
-};
-
-// TODO: search in fixed tile count chunks (say 10x10) per tick instead of an entire col
-
-var results = [], query = "";
-
-const findRow = (name, x) => {
-	if (x == Vars.world.width()) {
-		return
-	}
-
-	const tiles = Vars.world.tiles;
-	const col = tiles[x];
-	if (!col) return;
-
-	var tile;
-	for (var y = 0; y < Vars.world.height(); y++) {
-		tile = col[y];
-		if (tile && valid(name, [tile.block(), tile.floor(), tile.overlay()])) {
-			results.push({tile: tile, age: 0});
-			if (this.global.tracker) {
-				this.global.tracker.setMarker({x: x * Vars.tilesize, y: y * Vars.tilesize});
-			}
-		}
-	}
-
-	// Thread it in a lua-style coroutine as to not block for a year
-	Core.app.post(run(() => {
-		findRow(name, x + 1);
-	}));
-};
-
-const find = name => {
-	findRow(name, 0);
-};
-
-Events.on(EventType.WorldLoadEvent, run(() => {
-	results = [];
-}));
+var query = "---";
 
 ui.addTable("top", "radar", radar => {
 	radar.addImageButton(Icon.zoom, Styles.clearTransi, run(() => {
-		results = [];
-		find(query);
-	}));
+		scanner.scan(query);
+	})).size(40);
+
+	radar.addImageButton(Icon.cancel, Styles.clearTransi, run(() => {
+		scanner.scan(null);
+		Vars.ui.showInfoToast("Aborted scan", 3);
+	})).size(40);
+
 	radar.addField("Radar", cons(input => {
 		query = input;
 	})).width(100);
-	radar.label(prov(() => "" + results.length));
+
+	radar.label(prov(() => "" + scanner.results.length));
 });
 
 var region;
@@ -90,11 +50,11 @@ ui.onLoad(() => {
 const tmpVec = new Vec2();
 ui.addEffect((w, h) => {
 	Draw.color();
-	for (var i in results) {
-		var res = results[i];
+	for (var i in scanner.results) {
+		var res = scanner.results[i];
 		var scl = res.age / resultAge;
 		if (++res.age > resultAge) {
-			results.splice(i, i);
+			scanner.results.splice(i, i);
 		}
 
 		// Project the tiles position onto the screen
