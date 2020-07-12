@@ -82,7 +82,8 @@ Events.on(EventType.Trigger.update, run(() => {
 }));
 
 scanner.scan = (input) => {
-	scanner.cancel();
+	scanner.results = [];
+	scanner.chunk = 0;
 
 	/* Parse the input for modifiers */
 	const team = input.match(/(.+)\$(.+)/);
@@ -97,8 +98,7 @@ scanner.scan = (input) => {
 };
 
 scanner.cancel = () => {
-	scanner.results = [];
-	scanner.chunk = 0;
+	scanner.query = null;
 };
 
 module.exports = scanner;
