@@ -26,12 +26,14 @@ const resultAge = 60 * 20;
 var query = "---";
 
 ui.addTable("top", "radar", radar => {
+	radar.defaults().padRight(6);
+
 	radar.addImageButton(Icon.zoom, Styles.clearTransi, run(() => {
 		scanner.scan(query);
 	})).size(40);
 
 	radar.addImageButton(Icon.cancel, Styles.clearTransi, run(() => {
-		scanner.scan(null);
+		scanner.cancel();
 		Vars.ui.showInfoToast("Aborted scan", 3);
 	})).size(40);
 

@@ -23,14 +23,18 @@ const chunkSize = 100;
 const scanner = {
 	results: [],
 	query: null,
+	team: null,
 	chunk: 0,
 	limit: null
 };
 
-const valid = (name, blocks) => {
-	var block;
+const valid = (name, blocks, team) => {
+	if (scanner.team && team != scanner.team) {
+		return false;
+	}
+
 	for (var i in blocks) {
-		block = blocks[i];
+		var block = blocks[i];
 		if (block.name.includes(name)) {
 			return true;
 		}
@@ -47,7 +51,12 @@ const scanChunk = () => {
 		var x = (chunk + i) % Vars.world.width();
 		var y = Math.ceil((chunk + i) / Vars.world.width());
 		var tile = Vars.world.tile(x, y);
-		if (tile && valid(name, [tile.block(), tile.floor(), tile.overlay()])) {
+		if (tile && valid(name, [
+				// Skip blockparts as the center will be found anyway
+				tile.block() instanceof BlockPart ? Blocks.air : tile.block(),
+				tile.floor(),
+				tile.overlay()
+			], tile.team)) {
 			scanner.results.push({tile: tile, age: 0});
 			if (this.global.tracker) {
 				this.global.tracker.setMarker({x: x * Vars.tilesize, y: y * Vars.tilesize});
@@ -72,10 +81,24 @@ Events.on(EventType.Trigger.update, run(() => {
 	}
 }));
 
-scanner.scan = (name) => {
+scanner.scan = (input) => {
+	scanner.cancel();
+
+	/* Parse the input for modifiers */
+	const team = input.match(/(.+)\$(.+)/);
+
+	scanner.query = team ? team[1] : input;
+	try {
+		scanner.team = Team[team[2]];
+	} catch (e) {
+		// Invalid or unspecified team
+		scanner.team = null;
+	}
+};
+
+scanner.cancel = () => {
 	scanner.results = [];
 	scanner.chunk = 0;
-	scanner.query = name;
 };
 
 module.exports = scanner;
