@@ -19,7 +19,7 @@
 
 const ui = require("ui-lib/library");
 const scanner = require("radar/scanner");
-
+require("manual");
 // Frames a result lasts for
 const resultAge = 60 * 20;
 
