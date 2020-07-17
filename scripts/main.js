@@ -41,7 +41,7 @@ ui.addTable("top", "radar", radar => {
 		query = input;
 	})).width(100);
 
-	radar.label(prov(() => "" + scanner.results.length));
+	radar.label(prov(() => (scanner.query ? "" : "[green]") + scanner.results.length));
 });
 
 var region;
