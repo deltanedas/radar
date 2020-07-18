@@ -25,7 +25,7 @@ try {
 		// Thats not Iconc.zoom but on 104.10 it's a weird message thing
 		"The [coral][] button will start a search and clear previous results.",
 		"The [coral][] button will stop searching, but keep existing results.",
-		"Next to the input field is the found blocks count.",
+		"Next to the input field is the found blocks count, and the scan completion percentage.",
 
 		"# Input format",
 		"The block' name may include a team after a [coral]$[] symbol.",
