@@ -101,6 +101,15 @@ scanner.cancel = () => {
 	scanner.query = null;
 };
 
+scanner.label = () => {
+	return (scanner.query ? "" : "[green]") + scanner.results.length
+		+ (scanner.chunk == 0 ? "" : scanner.percent());
+};
+
+scanner.percent = () => {
+	return " " + Math.round((scanner.chunk / scanner.limit) * 100) + "%";
+};
+
 module.exports = scanner;
 
 })();
