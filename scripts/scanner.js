@@ -62,14 +62,13 @@ const scanChunk = () => {
 	}
 
 	// Stop scanning when the whole map is done
-	if (scanner.chunk >= scanner.limit) {
+	if (scanner.chunk == scanner.limit) {
 		scanner.query = null;
 	}
 };
 
 Events.on(WorldLoadEvent, () => {
-	scanner.limit = Vars.world.width() * Vars.world.height() / chunkSize;
-	print("Limit " + scanner.limit)
+	scanner.limit = Math.floor(Vars.world.width() * Vars.world.height() / chunkSize);
 	scanner.results = [];
 });
 
