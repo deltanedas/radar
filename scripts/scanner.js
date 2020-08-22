@@ -15,10 +15,8 @@
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-(() => {
-
 // How many tiles to scan each tick, affects lag
-const chunkSize = 100;
+const chunkSize = Core.settings.get("radar.chunk-size", 100);
 
 const scanner = {
 	results: [],
@@ -52,8 +50,7 @@ const scanChunk = () => {
 		var y = Math.ceil((chunk + i) / Vars.world.width());
 		var tile = Vars.world.tile(x, y);
 		if (tile && valid(name, [
-				// Skip blockparts as the center will be found anyway
-				tile.block() instanceof BlockPart ? Blocks.air : tile.block(),
+				tile.block(),
 				tile.floor(),
 				tile.overlay()
 			], tile.team)) {
@@ -65,23 +62,24 @@ const scanChunk = () => {
 	}
 
 	// Stop scanning when the whole map is done
-	if (scanner.chunk == scanner.limit) {
+	if (scanner.chunk >= scanner.limit) {
 		scanner.query = null;
 	}
 };
 
-Events.on(EventType.WorldLoadEvent, run(() => {
+Events.on(WorldLoadEvent, () => {
 	scanner.limit = Vars.world.width() * Vars.world.height() / chunkSize;
+	print("Limit " + scanner.limit)
 	scanner.results = [];
-}));
+});
 
-Events.on(EventType.Trigger.update, run(() => {
+Events.run(Trigger.update, () => {
 	if (scanner.query !== null) {
 		scanChunk();
 	}
-}));
+});
 
-scanner.scan = (input) => {
+scanner.scan = input => {
 	scanner.results = [];
 	scanner.chunk = 0;
 
@@ -111,5 +109,3 @@ scanner.percent = () => {
 };
 
 module.exports = scanner;
-
-})();

@@ -18,25 +18,7 @@
 try {
 	const rtfm = require("rtfm/library");
 
-	rtfm.addPage("Radar", [
-		"# How to use the radar",
-		"To access the radar, click the top dropdown button.",
-		"Search for a block you want to find in the [coral]text field[].",
-		// Thats not Iconc.zoom but on 104.10 it's a weird message thing
-		"The [coral][] button will start a search and clear previous results.",
-		"The [coral][] button will stop searching, but keep existing results.",
-		"Next to the input field is the found blocks count, and the scan completion percentage.",
-
-		"# Input format",
-		"The block' name may include a team after a [coral]$[] symbol.",
-		"[stat]If specified and valid[], only blocks on this team will be found.",
-		"Example to find enemy duos: [green]duo$crux[]",
-
-		"# What is found",
-		"A tile's block, floor and overlay are scanned.",
-		"Ores, liquids, spawns, etc. therefore can be found.",
-		"When found, a block gets a green blip that slowly fades away, sonar style."
-	]);
+	rtfm.addPage("Radar");
 
 	module.exports = true;
 } catch (e) {

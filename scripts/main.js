@@ -15,11 +15,10 @@
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-(() => {
-
 const ui = require("ui-lib/library");
 const scanner = require("radar/scanner");
-require("manual");
+require("radar/manual");
+
 // Frames a result lasts for
 const resultAge = 60 * 20;
 
@@ -28,20 +27,20 @@ var query = "---";
 ui.addTable("top", "radar", radar => {
 	radar.defaults().padRight(6);
 
-	radar.addImageButton(Icon.zoom, Styles.clearTransi, run(() => {
+	radar.button(Icon.zoom, Styles.clearTransi, () => {
 		scanner.scan(query);
-	})).size(40);
+	}).size(40);
 
-	radar.addImageButton(Icon.cancel, Styles.clearTransi, run(() => {
+	radar.button(Icon.cancel, Styles.clearTransi, () => {
 		scanner.cancel();
 		Vars.ui.showInfoToast("Aborted scan", 3);
-	})).size(40);
+	}).size(40);
 
-	radar.addField("Radar", cons(input => {
+	radar.field("Radar", input => {
 		query = input;
-	})).width(100);
+	}).width(100);
 
-	radar.label(prov(scanner.label));
+	radar.label(scanner.label);
 });
 
 var region;
@@ -73,5 +72,3 @@ ui.addEffect((w, h) => {
 	}
 	Draw.reset();
 });
-
-})();
