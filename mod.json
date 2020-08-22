@@ -3,7 +3,7 @@
 	"displayName": "[#00aaff]Radar",
 	"author": "DeltaNedas",
 	"description": "Adds a block detecting radar.\n[stat]Requires [#00aaff]DeltaNedas/ui-lib[].",
-	"version": "2.10.3",
+	"version": "2.10.4",
 	"dependencies": ["ui-lib"],
 	"hidden": true
 }

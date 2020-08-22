@@ -50,12 +50,17 @@ ui.onLoad(() => {
 
 const tmpVec = new Vec2();
 ui.addEffect((w, h) => {
+	if (scanner.results.length == 0) return;
 	Draw.color();
+
+	const prev = Draw.scl;
+	Draw.scl = w / Core.camera.width / 4;
+
 	for (var i in scanner.results) {
 		var res = scanner.results[i];
 		var scl = res.age / resultAge;
 		if (++res.age > resultAge) {
-			scanner.results.splice(i, i);
+			scanner.results.splice(i, 1);
 		}
 
 		// Project the tiles position onto the screen
@@ -67,8 +72,10 @@ ui.addEffect((w, h) => {
 		}
 
 		Draw.alpha(1 - scl);
-		// 4 rotations
+		// 4 rotations in a blips lifetime
 		Draw.rect(region, pos.x, pos.y, scl * 1440);
 	}
+
+	Draw.scl = prev;
 	Draw.reset();
 });
