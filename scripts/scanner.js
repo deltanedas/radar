@@ -55,8 +55,8 @@ const scanChunk = () => {
 				tile.overlay()
 			], tile.team)) {
 			scanner.results.push({tile: tile, age: 0});
-			if (this.global.tracker) {
-				this.global.tracker.setMarker({x: x * Vars.tilesize, y: y * Vars.tilesize});
+			if (global.tracker) {
+				global.tracker.setMarker({x: x * Vars.tilesize, y: y * Vars.tilesize});
 			}
 		}
 	}
