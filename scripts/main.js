@@ -27,11 +27,11 @@ var query = "---";
 ui.addTable("top", "radar", radar => {
 	radar.defaults().padRight(6);
 
-	radar.button(Icon.zoom, Styles.clearTransi, () => {
+	radar.button(Icon.zoom, Styles.cleari, () => {
 		scanner.scan(query);
 	}).size(40);
 
-	radar.button(Icon.cancel, Styles.clearTransi, () => {
+	radar.button(Icon.cancel, Styles.cleari, () => {
 		scanner.cancel();
 		Vars.ui.showInfoToast("Aborted scan", 3);
 	}).size(40);
