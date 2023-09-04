@@ -4,7 +4,7 @@
 	"author": "deltanedas",
 	"description": "Adds a block detecting radar.\n[stat]Requires [#00aaff]deltanedas/ui-lib[].",
 	"version": "3.10.5",
-	"dependencies": ["ui-lib"],
+	"dependencies": ["ui_lib"],
 	"hidden": true,
 	"minGameVersion": 136,
 	"repo": "deltanedas/radar"
